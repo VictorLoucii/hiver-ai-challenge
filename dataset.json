@@ -4,69 +4,79 @@
     "customer_sentiment": "Neutral",
     "request_type": "Authentication",
     "customer_query": "Hello, I can't seem to log into my account. I've requested a password reset email three times but haven't received anything.",
-    "agent_guideline": "Verify the customer's email address, check the email delivery logs, and manually trigger a reset link or provide a temporary password after authenticating the user."
+    "agent_guideline": "Verify the customer's email address, check the email delivery logs, and manually trigger a reset link or provide a temporary password after authenticating the user.",
+    "ideal_reply": "Hi there, thanks for letting us know, and sorry for the trouble logging in. I've checked our system and confirmed your email address on file is correct, but it looks like the reset emails weren't delivered. I've manually triggered a new password reset link to your inbox, which should arrive within the next few minutes. If you still don't see it (please check your spam folder too), reply here and I'll issue you a temporary password directly. Let me know how it goes!"
   },
   {
     "id": "CS-002",
     "customer_sentiment": "Neutral",
     "request_type": "Billing",
     "customer_query": "Hi, I am looking at my credit card statement and it looks like I was charged twice for my subscription this month. Can you look into this?",
-    "agent_guideline": "Review the customer's billing history. If a duplicate charge is found, process a refund immediately and assure the customer the funds will return to their account within standard processing times."
+    "agent_guideline": "Review the customer's billing history. If a duplicate charge is found, process a refund immediately and assure the customer the funds will return to their account within standard processing times.",
+    "ideal_reply": "Hi, thanks for flagging this. I pulled up your billing history and can confirm you were indeed charged twice for your subscription this month. I've gone ahead and processed a refund for the duplicate charge. You should see the funds back in your account within 5-7 business days, depending on your bank's processing times. I'm sorry for the inconvenience, and please let me know if you don't see the refund by then."
   },
   {
     "id": "CS-003",
     "customer_sentiment": "Angry",
     "request_type": "Shipping/Fulfillment",
     "customer_query": "Where is my package?! It's been two weeks, your tracking system is completely useless, and nobody is answering my emails. This is unacceptable. I demand a full refund and I am never shopping here again!",
-    "agent_guideline": "Respond with immediate empathy and de-escalation techniques. Apologize for the delay and poor experience. Locate the package instantly, offer a full refund for the shipping costs, and provide a clear, honest timeline."
+    "agent_guideline": "Respond with immediate empathy and de-escalation techniques. Apologize for the delay and poor experience. Locate the package instantly, offer a full refund for the shipping costs, and provide a clear, honest timeline.",
+    "ideal_reply": "I am so sorry for this experience — a two-week wait with no answers is completely unacceptable, and I understand why you're upset. I've located your package: it's currently held at a regional carrier facility due to a routing delay, and it's now scheduled to arrive within 2 business days. I've refunded your shipping costs in full, and that will reflect on your statement shortly. If it doesn't arrive by Friday, reach back out to me directly and I will issue a full refund for the order itself. Thank you for your patience, and I truly apologize for letting you down here."
   },
   {
     "id": "CS-004",
     "customer_sentiment": "Neutral",
     "request_type": "Product Information",
     "customer_query": "I'm interested in the X200 Wireless Headphones. Do you know if they are compatible with older Bluetooth 4.0 devices?",
-    "agent_guideline": "Check the product specifications database and provide a clear yes/no answer, along with any potential limitations (e.g., lower audio quality or shorter range) on older devices."
+    "agent_guideline": "Check the product specifications database and provide a clear yes/no answer, along with any potential limitations (e.g., lower audio quality or shorter range) on older devices.",
+    "ideal_reply": "Great question! Yes, the X200 Wireless Headphones are backward-compatible with Bluetooth 4.0 devices. That said, you may notice a slightly shorter wireless range (around 10m instead of 15m) and marginally lower audio codec support compared to pairing with a Bluetooth 5.0+ device. For most everyday listening this won't be very noticeable. Let me know if you have any other questions before you decide!"
   },
   {
     "id": "CS-005",
     "customer_sentiment": "Weird",
     "request_type": "Off-Topic/Miscellaneous",
     "customer_query": "This is totally random, but my microwave is making a humming noise that sounds exactly like a B-flat. Do you guys sell microwaves? Also, do you happen to have a good recipe for potato salad?",
-    "agent_guideline": "Maintain a professional but friendly tone. Politely clarify that the company does not sell microwaves. Feel free to share a brief, family-friendly potato salad recipe or a polite sign-off to humanize the brand."
+    "agent_guideline": "Maintain a professional but friendly tone. Politely clarify that the company does not sell microwaves. Feel free to share a brief, family-friendly potato salad recipe or a polite sign-off to humanize the brand.",
+    "ideal_reply": "Ha, that's a fun one! Unfortunately we don't sell microwaves, so I can't help diagnose that B-flat hum, though it might be worth having an electrician take a look if it continues. As for potato salad, a quick classic: boil diced potatoes until tender, then mix with mayo, mustard, chopped celery, red onion, a splash of pickle juice, salt, and pepper. Chill for an hour before serving and it's a crowd-pleaser. Thanks for reaching out, and let us know if there's anything else we can help with!"
   },
   {
     "id": "CS-006",
     "customer_sentiment": "Neutral",
     "request_type": "Account Management",
     "customer_query": "I am trying to update my shipping address for an order I placed 10 minutes ago, but the system won't let me edit it. Can you change it to 123 Main St?",
-    "agent_guideline": "Check the order status. If it has not yet been processed by the warehouse, update the address manually and confirm the change with the customer."
+    "agent_guideline": "Check the order status. If it has not yet been processed by the warehouse, update the address manually and confirm the change with the customer.",
+    "ideal_reply": "Thanks for reaching out so quickly! I checked your order and it hasn't been picked up by our warehouse yet, so I was able to manually update the shipping address to 123 Main St for you. You'll receive a confirmation email shortly reflecting the change. If anything else needs updating before it ships, just let me know!"
   },
   {
     "id": "CS-007",
     "customer_sentiment": "Frustrated",
     "request_type": "Technical Support",
     "customer_query": "Every time I try to upload my profile picture on the mobile app, it crashes. I've reinstalled it twice already.",
-    "agent_guideline": "Acknowledge the frustration. Ask for the customer's device model and OS version. Provide a known workaround if available, and escalate the bug to the engineering team with the user's details."
+    "agent_guideline": "Acknowledge the frustration. Ask for the customer's device model and OS version. Provide a known workaround if available, and escalate the bug to the engineering team with the user's details.",
+    "ideal_reply": "I'm sorry for the repeated crashes — that's frustrating, especially after reinstalling twice already. Could you let me know your device model and OS version so I can narrow down the cause? In the meantime, a common workaround is uploading the photo from your camera roll instead of taking it live in-app, which sometimes avoids the crash. I'm also escalating this to our engineering team with your account details so they can dig into it directly. Thanks for your patience while we sort this out."
   },
   {
     "id": "CS-008",
     "customer_sentiment": "Neutral",
     "request_type": "Feature Request",
     "customer_query": "I love your software, but it would be really helpful if there was a dark mode option for working at night. Are there plans to add this?",
-    "agent_guideline": "Thank the customer for their feedback and loyalty. Inform them if the feature is on the product roadmap, and log their request in the feedback tracker to boost its priority."
+    "agent_guideline": "Thank the customer for their feedback and loyalty. Inform them if the feature is on the product roadmap, and log their request in the feedback tracker to boost its priority.",
+    "ideal_reply": "Thank you so much for the kind words and for being a loyal user! Dark mode is actually already on our product roadmap, and requests like yours help us prioritize it. I've logged your feedback against that feature so it counts toward moving it up the queue. We'll be sure to announce it in our release notes once it ships. Thanks again for taking the time to write in!"
   },
   {
     "id": "CS-009",
     "customer_sentiment": "Worried",
     "request_type": "Returns/Refunds",
     "customer_query": "I bought a jacket last week in-store but I lost the physical receipt. The tags are still on it. Can I still get a refund?",
-    "agent_guideline": "Explain the return policy clearly. Inform the customer that a receipt can often be looked up using the credit card used for purchase or their loyalty account details."
+    "agent_guideline": "Explain the return policy clearly. Inform the customer that a receipt can often be looked up using the credit card used for purchase or their loyalty account details.",
+    "ideal_reply": "No need to worry — since the tags are still attached and it's within our 30-day return window, you should still be able to get a refund. We can often look up your receipt using the credit card you purchased with or your loyalty account, if you have one. Just bring the jacket and the card you paid with to any store location, and our team there can pull up the transaction for you. Let me know if you'd like help finding your nearest store."
   },
   {
     "id": "CS-010",
     "customer_sentiment": "Neutral",
     "request_type": "Sales",
     "customer_query": "I want to buy the premium plan for my team of 15. Do you offer any bulk discounts or enterprise pricing?",
-    "agent_guideline": "Confirm that bulk pricing is available. Provide a breakdown of the discount tiers and offer to connect them with a dedicated sales representative to finalize the setup."
+    "agent_guideline": "Confirm that bulk pricing is available. Provide a breakdown of the discount tiers and offer to connect them with a dedicated sales representative to finalize the setup.",
+    "ideal_reply": "Thanks for your interest in the premium plan! Yes, we do offer bulk pricing: teams of 10-24 seats get 15% off, and 25+ seats get 25% off, so a team of 15 would qualify for the 15% tier. I'd love to connect you with one of our dedicated sales reps who can walk through the exact numbers and get your team set up quickly. Would you like me to have someone reach out this week?"
   }
 ]

@@ -1,26 +1,6 @@
-# Hiver AI Challenge
+# Dataset provenance & representativeness note
 
-## Sprint 1 complete — Setup & Dataset Finalization
-
-**What was set up:**
-- Python virtual environment (`venv/`) with dependencies installed via `google-genai`, `pydantic`, and `python-dotenv`; frozen into `requirements.txt`.
-- `.env` (git-ignored) holding a placeholder `GEMINI_API_KEY=your_key_here` — the variable name matches what the `google-genai` SDK reads automatically. Fill in a real key before Sprint 2; the key is never read or printed by any script in this repo.
-- `.gitignore` covering `.env`, `venv/`, `__pycache__/`, and `*.pyc`. Verified with `git status` that `.env` and `venv/` are not tracked or staged.
-- `dataset.json` extended with an `ideal_reply` field on all 10 rows — the actual reply text an agent would send — while keeping `agent_guideline` untouched. `ideal_reply` is never used as an exact-match target; it's grounding material for the Sprint 2 generator and a loose style reference for the Sprint 3 judge.
-
-**Install & setup:**
-```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-```
-Then create a `.env` file at the project root with:
-```
-GEMINI_API_KEY=your_key_here
-```
-and fill in your real API key (never commit this file — it's git-ignored).
-
-### Dataset provenance & representativeness
+*(Paste this into README.md during Sprint 4 if the Sprint 1 section has since been overwritten.)*
 
 The dataset (`dataset.json`) is hand-authored synthetic customer support data: 10 rows, each pairing a `customer_query` with the `ideal_reply` an agent would actually send, plus an `agent_guideline` capturing the underlying response policy. It was designed, not scraped, so it's free of PII and safe to publish, while still covering the shape of a real support inbox.
 
