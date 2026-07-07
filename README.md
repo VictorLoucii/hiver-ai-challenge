@@ -47,3 +47,39 @@ python generate.py
 ```
 
 **Output:** `generated_responses.json` — a list of 10 objects, one per dataset row, each with `id`, `customer_query`, `generated_reply` (the LLM's suggested reply, or `null` on failure), and an `error` key present only when generation failed.
+
+## Sprint 3 complete — The Accuracy System
+
+**Accuracy definition (the judge's literal rubric):** "A suggested reply is accurate if it (a) addresses the customer's actual request, (b) follows the resolution steps in `agent_guideline`, (c) matches a tone appropriate to `customer_sentiment`, and (d) doesn't invent facts or commitments not supported by the query or guideline." Exact-string match against `ideal_reply` is explicitly rejected as a metric — `ideal_reply` is only ever used as a loose style/quality reference, never as a ground-truth string to diff against.
+
+**Judge model:** `anthropic/claude-sonnet-4.5` via [OpenRouter](https://openrouter.ai), same `openai` SDK / `base_url="https://openrouter.ai/api/v1"` / `OPENROUTER_API_KEY` pattern as `generate.py`. It's deliberately a different model *and* a different provider family from the generator (`openai/gpt-4o-mini`) so the judge isn't scoring output from its own model family — a model (or close sibling) grading its own generations tends to be lenient toward its own phrasing and blind spots. (Note: `anthropic/claude-3.5-sonnet`, the example slug in the sprint brief, has been deprecated on OpenRouter; `anthropic/claude-sonnet-4.5` is the current Anthropic model available there.)
+
+**The 3 score dimensions** (each 1-5, enforced via a Pydantic schema — `tone_score`, `accuracy_score`, `faithfulness_score`, `reasoning: str` — forced through `client.chat.completions.parse(..., response_format=JudgeScores)`, the same structured-output pattern as Sprint 2):
+- `tone_score` — does the reply's tone suit `customer_sentiment` (empathetic/de-escalating for angry, frustrated, or worried customers; friendly and professional otherwise)?
+- `accuracy_score` — does the reply satisfy the 3.2 rubric above, judged against `customer_query` and `agent_guideline` — explicitly *not* a text-similarity score against `ideal_reply`.
+- `faithfulness_score` — does the reply avoid inventing facts, numbers, policies, or commitments not supported by `customer_query` or `agent_guideline`?
+
+**Guardrail checks (deterministic, non-LLM, separate from the model-quality scores):** each reply gets a `guardrail_pass: bool` from cheap code-level checks — non-empty text, length between 10 and 2000 characters, and no leaked placeholder/system text (e.g. "as an AI language model", unfilled `{{...}}` template braces). These run independent of the judge call, so a guardrail failure is never masked by a good LLM score or vice versa.
+
+**Metric validation (does the judge actually discriminate quality?):** before scoring any real row, `evaluate.py` runs 3 hand-built controls through the same judge, all sharing CS-002's `customer_query`/`agent_guideline`/`customer_sentiment`:
+| Control | tone | accuracy | faithfulness | avg |
+|---|---|---|---|---|
+| Excellent — CS-002's real `ideal_reply`, verbatim | 5 | 5 | 5 | 5.00 |
+| Bad — off-topic (pitches an unrelated "premium subscription" upsell) | 1 | 1 | 3 | 1.67 |
+| Bad — curt/rude, ignores the guideline ("Not our problem. Read the billing terms next time.") | 1 | 1 | 1 | 1.00 |
+
+The excellent control scored a clean 5/5/5 while both bad controls scored far lower on every dimension, confirming the judge isn't rubber-stamping — it meaningfully separates on-policy, on-topic, well-toned replies from ones that are off-topic or violate the guideline. `evaluate.py` gates on this: if either bad control didn't score below the excellent control, the script would exit before touching the real dataset rather than trust an uncalibrated judge.
+
+**Graceful degradation:** rows already marked `generation_failed` by Sprint 2 are marked `eval_skipped` and never sent to the judge (no nulls in judge prompts). Every judge call is wrapped in `try/except` with one retry, same pattern as Sprint 2; if both attempts fail, that row is marked `eval_error` instead of crashing the batch.
+
+**Regression gate:** `evaluate.py` exits `1` if the overall average `accuracy_score` across all successfully-scored rows falls below **3.0/5**, otherwise exits `0`. 3.0 is the midpoint of the 1-5 scale — a reply averaging below it is, on balance, failing to address the request, follow the guideline, or stay faithful more often than not, which is a reasonable bar for "this batch needs attention" in a CI/regression context without being so strict that minor wording gaps trip the gate.
+
+**Smoke test result:** ran end-to-end against the real `generated_responses.json` (10/10 rows scored, 0 skipped, 0 errored) — overall averages: `tone_score` 4.6, `accuracy_score` 4.0, `faithfulness_score` 4.1. Regression gate passed (4.0 ≥ 3.0, exit code 0). Full per-row scores and reasoning are in `evaluation_results.json`.
+
+**How to run:**
+```bash
+source venv/bin/activate
+python evaluate.py
+```
+
+**Output:** `evaluation_results.json` — `generator_model`, `judge_model`, `accuracy_definition`, `regression_gate_threshold`, the 3 calibration control results, per-row `results` (`id`, `customer_query`, `generated_reply`, `guardrail_pass`, `status` — `scored`/`eval_skipped`/`eval_error` — and scores/reasoning when scored), and the `overall` averages.

@@ -1,0 +1,156 @@
+{
+  "generator_model": "openai/gpt-4o-mini",
+  "judge_model": "anthropic/claude-sonnet-4.5",
+  "accuracy_definition": "A suggested reply is accurate if it (a) addresses the customer's actual request, (b) follows the resolution steps in agent_guideline, (c) matches a tone appropriate to customer_sentiment, and (d) doesn't invent facts or commitments not supported by the query or guideline.",
+  "regression_gate_threshold": 3.0,
+  "calibration": [
+    {
+      "label": "excellent (real ideal_reply verbatim)",
+      "reply": "Hi, thanks for flagging this. I pulled up your billing history and can confirm you were indeed charged twice for your subscription this month. I've gone ahead and processed a refund for the duplicate charge. You should see the funds back in your account within 5-7 business days, depending on your bank's processing times. I'm sorry for the inconvenience, and please let me know if you don't see the refund by then.",
+      "tone_score": 5,
+      "accuracy_score": 5,
+      "faithfulness_score": 5,
+      "reasoning": "The CANDIDATE reply perfectly aligns with all rubric requirements. Tone: The response is professional, clear, and appropriately empathetic for a neutral customer sentiment - acknowledging the issue, apologizing for inconvenience, and offering follow-up support without being overly apologetic or casual. Accuracy: The reply directly addresses the customer's concern about duplicate charges, follows the agent_guideline by reviewing billing history, confirming the duplicate, processing an immediate refund, and providing standard processing timeframes. Faithfulness: All statements are grounded in the guideline - the billing review, duplicate confirmation, refund processing, and 5-7 business day timeframe for standard processing are reasonable and supported. No facts, policies, or commitments are invented. The reply is substantively identical to the reference but should not be penalized as the reference is explicitly a loose style example only.",
+      "avg": 5.0
+    },
+    {
+      "label": "bad: off-topic",
+      "reply": "Thanks for reaching out! Have you seen our new premium subscription tier? It comes with exclusive discounts on rare stamps and a free tote bag. Let us know if you'd like to upgrade!",
+      "tone_score": 1,
+      "accuracy_score": 1,
+      "faithfulness_score": 3,
+      "reasoning": "The CANDIDATE reply completely fails to address the customer's concern about being charged twice for their subscription. Instead, it attempts to upsell a premium subscription tier with unrelated benefits (rare stamps, tote bag) that have no connection to the customer's billing issue. The tone is inappropriately promotional when the customer needs a substantive resolution to a billing problem. The reply violates the agent_guideline by not reviewing billing history, not acknowledging the duplicate charge issue, and not processing a refund. While the candidate doesn't invent facts about the customer's specific billing situation (hence moderate faithfulness score), it introduces irrelevant product information. This is a fundamentally inadequate response that ignores both the customer's query and the required resolution steps.",
+      "avg": 1.6666666666666667
+    },
+    {
+      "label": "bad: curt/rude, ignores guideline",
+      "reply": "Not our problem. Read the billing terms next time.",
+      "tone_score": 1,
+      "accuracy_score": 1,
+      "faithfulness_score": 1,
+      "reasoning": "The CANDIDATE reply is completely inadequate across all dimensions. For tone (1/5): The customer sentiment is Neutral, requiring a professional and helpful tone, but the CANDIDATE is dismissive, rude, and antagonistic. For accuracy (1/5): The reply fails entirely to address the customer's request - it does not review billing history, does not acknowledge or investigate the duplicate charge claim, does not process a refund as required by the agent_guideline, and provides no resolution whatsoever. For faithfulness (1/5): While the CANDIDATE doesn't explicitly invent false facts, it implies the issue is the customer's fault due to 'billing terms' without any basis in the customer_query or agent_guideline - there is no information suggesting the customer failed to read terms or that this is a terms issue rather than a billing error. The reply completely violates the agent_guideline's directive to review history, confirm duplicate charges if found, and process refunds.",
+      "avg": 1.0
+    }
+  ],
+  "results": [
+    {
+      "id": "CS-001",
+      "customer_query": "Hello, I can't seem to log into my account. I've requested a password reset email three times but haven't received anything.",
+      "generated_reply": "Hi there! I'm here to help you get back into your account. First, could you please confirm the email address associated with your account? Once I have that, I'll check the email delivery logs to see if there were any issues with sending the reset email. If necessary, I can also manually trigger a reset link or provide you with a temporary password. Thank you for your patience, and I'm looking forward to resolving this for you!",
+      "guardrail_pass": true,
+      "status": "scored",
+      "tone_score": 4,
+      "accuracy_score": 3,
+      "faithfulness_score": 5,
+      "reasoning": "Tone: The CANDIDATE is friendly and professional, which suits the neutral customer sentiment. It's helpful and reassuring without being overly casual. Minor deduction because it could be slightly more empathetic about the inconvenience (the reference acknowledges 'sorry for the trouble'). Accuracy: The CANDIDATE correctly asks to verify the email address and mentions checking delivery logs and offering manual reset/temporary password, all per the agent_guideline. However, it's entirely procedural questions without taking any proactive action yet. The reference shows the agent already checked the system and triggered a solution, which better addresses the customer's immediate need after three failed attempts. The CANDIDATE delays resolution by asking for information that may already be available in the system. This is a meaningful gap in addressing the actual request promptly. Faithfulness: The CANDIDATE invents no facts, policies, or commitments not supported by the guideline or query. All statements align with the provided guideline steps."
+    },
+    {
+      "id": "CS-002",
+      "customer_query": "Hi, I am looking at my credit card statement and it looks like I was charged twice for my subscription this month. Can you look into this?",
+      "generated_reply": "Hi there, thank you for reaching out, and I apologize for the confusion regarding your charges. I've reviewed your billing history and confirmed that a duplicate charge for your subscription was indeed processed this month. I've gone ahead and processed a refund for the duplicate amount, and you should see the funds returned to your account within the standard processing timeframe of 3-5 business days. If you have any more questions or need further assistance, feel free to reach out. Thank you for your understanding!",
+      "guardrail_pass": true,
+      "status": "scored",
+      "tone_score": 5,
+      "accuracy_score": 5,
+      "faithfulness_score": 4,
+      "reasoning": "Tone: The candidate appropriately matches the neutral customer sentiment with a professional, courteous tone that acknowledges the issue without over-apologizing. Accuracy: The reply directly addresses the duplicate charge concern, confirms reviewing billing history per guideline, processes the refund immediately as instructed, and mentions standard processing times - all key requirements from the agent_guideline. Faithfulness: The candidate invents a specific '3-5 business days' timeframe while the reference uses '5-7 business days.' Since the guideline only says 'standard processing times' without specifying the exact duration, the candidate introduces a concrete number not supported by the source materials. This is a minor invention that slightly reduces faithfulness score, though the core actions and commitments align with the guideline."
+    },
+    {
+      "id": "CS-003",
+      "customer_query": "Where is my package?! It's been two weeks, your tracking system is completely useless, and nobody is answering my emails. This is unacceptable. I demand a full refund and I am never shopping here again!",
+      "generated_reply": "Hi, I completely understand your frustration, and I sincerely apologize for the delay and the poor experience you've had. I can see how important it is to receive your package in a timely manner. \n\nI've looked into your order, and I can confirm that your package is currently delayed in transit, which is not the service we aim to provide. I am processing a full refund for your shipping costs right away, and you should see that reflected in your account within 5-7 business days. \n\nAs for your package, I will personally ensure it is prioritized and will provide you with an update on its status within the next 24 hours. I am here to assist you further, so please let me know if there's anything else I can do at this time.",
+      "guardrail_pass": true,
+      "status": "scored",
+      "tone_score": 4,
+      "accuracy_score": 2,
+      "faithfulness_score": 3,
+      "reasoning": "Tone is mostly appropriate with empathy and de-escalation, though could be stronger given the customer's anger level. Major accuracy issues: (1) fails to provide the specific location and honest timeline required by guideline ('delayed in transit' is vague vs. 'held at regional carrier facility, arriving within 2 business days'), (2) promises an 'update within 24 hours' instead of giving the timeline now as instructed, (3) doesn't offer the escalated full-order refund contingency shown in reference. Faithfulness concern: invents '5-7 business days' refund timeline not supported by guideline (reference says 'shortly'). The reply is polite but misses core substance: immediate package location, clear timeline, and appropriate refund escalation path."
+    },
+    {
+      "id": "CS-004",
+      "customer_query": "I'm interested in the X200 Wireless Headphones. Do you know if they are compatible with older Bluetooth 4.0 devices?",
+      "generated_reply": "Hi there! Thanks for your interest in the X200 Wireless Headphones. Yes, they are compatible with older Bluetooth 4.0 devices. However, please keep in mind that you might experience some limitations such as lower audio quality and potentially shorter range compared to newer Bluetooth versions. If you have any more questions or need further assistance, feel free to ask!",
+      "guardrail_pass": true,
+      "status": "scored",
+      "tone_score": 5,
+      "accuracy_score": 5,
+      "faithfulness_score": 5,
+      "reasoning": "The CANDIDATE reply fully satisfies all rubric requirements. TONE: The neutral, friendly, and professional tone is perfectly appropriate for a customer with neutral sentiment asking a straightforward technical question. ACCURACY: The reply directly addresses the compatibility question with a clear 'yes', mentions the relevant limitations (lower audio quality and shorter range) as required by the agent_guideline, and stays on topic. FAITHFULNESS: All claims are supported by the guideline - compatibility is confirmed, and the mentioned limitations (audio quality, range) align with what the guideline instructs to cover. The reply does not invent specific numbers, policies, or unsupported commitments. While the REFERENCE provides more specific technical details (10m vs 15m range, codec support), the CANDIDATE is not penalized for being less specific since the guideline only requires mentioning 'potential limitations' without mandating exact figures. The substance is accurate and faithful to the source materials."
+    },
+    {
+      "id": "CS-005",
+      "customer_query": "This is totally random, but my microwave is making a humming noise that sounds exactly like a B-flat. Do you guys sell microwaves? Also, do you happen to have a good recipe for potato salad?",
+      "generated_reply": "Hi there! Thanks for reaching out, and that's definitely an interesting question! I can help clarify that we don't sell microwaves, but it's always good to keep an eye on those humming sounds.\n\nAs for your potato salad request, I'd be happy to share a simple recipe:\n\n**Ingredients:**  \n- 2 pounds of potatoes (cubed)  \n- 1 cup of mayonnaise  \n- 2 tablespoons of mustard  \n- 1/2 cup of chopped celery  \n- 1/4 cup of chopped onion  \n- Salt and pepper to taste  \n- Optional: chopped hard-boiled eggs or pickles for extra flavor  \n\n**Instructions:**  \n1. Boil the cubed potatoes until tender, about 10-15 minutes.  \n2. Drain and let them cool in a large bowl.  \n3. In a separate bowl, mix together the mayonnaise, mustard, celery, onion, salt, and pepper.  \n4. Combine the dressing with the cooled potatoes and mix well.  \n5. Chill in the fridge for at least an hour before serving.  \n\nI hope this helps! If you have any further questions, feel free to ask. Enjoy your potato salad!",
+      "guardrail_pass": true,
+      "status": "scored",
+      "tone_score": 4,
+      "accuracy_score": 5,
+      "faithfulness_score": 5,
+      "reasoning": "The CANDIDATE appropriately handles the unusual 'weird' customer sentiment with a friendly, professional tone that acknowledges the quirky nature of the query without being overly casual or dismissive. The reply correctly clarifies that the company doesn't sell microwaves, fulfilling the primary guideline requirement. The potato salad recipe is family-friendly, detailed, and helpful, which humanizes the brand as instructed. The tone is warm and accommodating ('Thanks for reaching out', 'I'd be happy to share', 'I hope this helps!') which suits the sentiment well. Minor deduction on tone_score (4 vs 5) only because the REFERENCE showed slightly more personality by commenting on the B-flat hum specifically and suggesting an electrician, making it feel slightly more engaged with the customer's quirky observation. However, the CANDIDATE doesn't invent any facts, commitments, or policies not supported by the guideline, stays accurate to the customer's dual request, and provides a complete, appropriate response. All substance requirements are met faithfully."
+    },
+    {
+      "id": "CS-006",
+      "customer_query": "I am trying to update my shipping address for an order I placed 10 minutes ago, but the system won't let me edit it. Can you change it to 123 Main St?",
+      "generated_reply": "Hi there, thanks for reaching out! I understand that you'd like to update your shipping address. I've checked the status of your order, and it looks like it hasn't yet been processed by the warehouse, so I can definitely assist you with this.\n\nI've updated the shipping address to 123 Main St as requested. You should see the confirmation of this change shortly. If you have any further questions or need additional assistance, feel free to reach out!",
+      "guardrail_pass": true,
+      "status": "scored",
+      "tone_score": 5,
+      "accuracy_score": 5,
+      "faithfulness_score": 5,
+      "reasoning": "The CANDIDATE reply excellently meets all criteria. Tone (5): The response is professional, friendly, and appropriately neutral-positive for a neutral customer sentiment - not overly casual but helpful and reassuring. Accuracy (5): The reply directly addresses the customer's request to update the shipping address, follows the agent_guideline by checking order status and updating manually when warehouse hasn't processed it, confirms the change to the specific address requested (123 Main St), and maintains appropriate tone. Faithfulness (5): The response makes no unsupported claims - it references checking the order status (guideline step), states the warehouse hasn't processed it yet (condition from guideline), confirms manual update to the exact address provided by customer, and offers further assistance. All statements are grounded in either the query or guideline. The reply differs slightly in wording from the reference (e.g., no mention of 'picked up' or 'email confirmation') but these are stylistic differences that don't affect substance - the core actions and information align perfectly with the guideline requirements."
+    },
+    {
+      "id": "CS-007",
+      "customer_query": "Every time I try to upload my profile picture on the mobile app, it crashes. I've reinstalled it twice already.",
+      "generated_reply": "Hi there, I'm really sorry to hear about the issues you're facing with uploading your profile picture on the app\u2014it must be quite frustrating. To better assist you, could you please let me know the model of your device and the OS version you're using? \n\nIn the meantime, a known workaround for this issue is to try clearing the app cache in your device settings, which can sometimes resolve crashes. \n\nI'll also make sure to escalate this bug to our engineering team with the details you provide once I have them. Thank you for your patience, and I look forward to helping you get this sorted out!",
+      "guardrail_pass": true,
+      "status": "scored",
+      "tone_score": 5,
+      "accuracy_score": 4,
+      "faithfulness_score": 3,
+      "reasoning": "Tone is empathetic and de-escalating, appropriately addressing the customer's frustration. The reply acknowledges the problem, asks for device/OS details as required, and commits to escalating to engineering. However, there are two issues: (1) The workaround suggested (clearing app cache) differs from the guideline's workaround (uploading from camera roll instead of taking live), which may or may not be valid but isn't supported by the agent_guideline. (2) The escalation is conditional ('once I have them') rather than immediate with available account details, whereas the guideline implies escalation should happen proactively. The faithfulness score is reduced because the cache-clearing workaround isn't mentioned in the guideline and could be inventing a solution not supported by the provided information."
+    },
+    {
+      "id": "CS-008",
+      "customer_query": "I love your software, but it would be really helpful if there was a dark mode option for working at night. Are there plans to add this?",
+      "generated_reply": "Hi there, thank you for your kind words and for being a loyal customer! We really appreciate your feedback regarding the dark mode option. I can confirm that it is on our product roadmap, and I will log your request in our feedback tracker to boost its priority. We\u2019re always looking for ways to enhance the user experience, so your input is invaluable. If you have any more suggestions or questions, feel free to reach out!",
+      "guardrail_pass": true,
+      "status": "scored",
+      "tone_score": 5,
+      "accuracy_score": 5,
+      "faithfulness_score": 5,
+      "reasoning": "The CANDIDATE reply excellently addresses all requirements. Tone is professional, warm, and appropriate for a neutral sentiment customer making a feature request. Accuracy is perfect: it thanks the customer for feedback and loyalty, confirms the feature is on the roadmap, and states the request will be logged to boost priority - exactly as the agent_guideline prescribes. Faithfulness is maintained throughout - no invented facts, timelines, or commitments beyond what the guideline supports. The reply doesn't promise specific release dates or features not mentioned in the guideline. While the REFERENCE mentions release notes, the CANDIDATE's omission of this detail doesn't violate the guideline and is appropriately conservative. The invitation for further feedback is a professional customer service practice that doesn't contradict any guidance."
+    },
+    {
+      "id": "CS-009",
+      "customer_query": "I bought a jacket last week in-store but I lost the physical receipt. The tags are still on it. Can I still get a refund?",
+      "generated_reply": "Hi there, I understand how concerning it can be to lose a receipt, and I\u2019m here to help! Our return policy does allow for refunds even if you don't have the physical receipt, especially since the tags are still on the jacket. \n\nYou can provide the credit card you used for the purchase, or if you have a loyalty account, I can look up your transaction that way. Just let me know which option works best for you, and we\u2019ll get this sorted out! If you have any other questions, feel free to ask.",
+      "guardrail_pass": true,
+      "status": "scored",
+      "tone_score": 5,
+      "accuracy_score": 4,
+      "faithfulness_score": 5,
+      "reasoning": "Tone is appropriately empathetic and reassuring for a worried customer, using phrases like 'I understand how concerning' and 'I'm here to help.' The reply accurately addresses the customer's concern about the lost receipt and correctly explains that the receipt can be looked up using credit card or loyalty account. However, it loses one point on accuracy for not explicitly instructing the customer to bring the jacket and card to a physical store location (the purchase was made in-store, so the return would logically need to happen in-store too), which is a minor but meaningful procedural gap compared to the guideline's intent of clearly explaining the return policy process. Faithfulness score is perfect as the candidate makes no unsupported claims about policies, timeframes, or procedures beyond what's in the guideline."
+    },
+    {
+      "id": "CS-010",
+      "customer_query": "I want to buy the premium plan for my team of 15. Do you offer any bulk discounts or enterprise pricing?",
+      "generated_reply": "Hi there! Thanks for your interest in our premium plan for your team. I'm happy to confirm that we do offer bulk pricing for larger teams. Here\u2019s a quick breakdown of our discount tiers:\n\n- For 10-20 users, you'll receive a 10% discount.\n- For 21-50 users, the discount increases to 15%.\n- For 51 or more users, we offer a 20% discount.\n\nSince you have a team of 15, you would be eligible for the 10% discount. If you'd like, I can connect you with a dedicated sales representative who can assist you in finalizing the setup and answer any additional questions you might have. Let me know how you\u2019d like to proceed!",
+      "guardrail_pass": true,
+      "status": "scored",
+      "tone_score": 4,
+      "accuracy_score": 2,
+      "faithfulness_score": 1,
+      "reasoning": "Tone is professional and appropriate for neutral sentiment, earning a 4. However, there are critical accuracy and faithfulness issues. The CANDIDATE provides completely different discount tiers (10-20 users at 10%, 21-50 at 15%, 51+ at 20%) than what the agent_guideline establishes through the REFERENCE_REPLY (10-24 at 15%, 25+ at 25%). This is a fabrication of discount information not supported by the guideline. The CANDIDATE tells the customer their team of 15 qualifies for 10% when the guideline indicates it should be 15%. This directly violates the accuracy rubric by inventing facts and failing to follow the resolution steps correctly. The CANDIDATE does offer to connect with a sales rep as required, but the core pricing information is incorrect and unsupported, resulting in low accuracy_score of 2 and faithfulness_score of 1."
+    }
+  ],
+  "overall": {
+    "avg_tone_score": 4.6,
+    "avg_accuracy_score": 4.0,
+    "avg_faithfulness_score": 4.1,
+    "n_scored": 10,
+    "n_skipped": 0,
+    "n_error": 0,
+    "n_total": 10
+  }
+}
